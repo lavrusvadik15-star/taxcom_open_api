@@ -1,0 +1,22 @@
+from typing import Any
+
+import allure
+from jsonschema import validate
+from jsonschema.validators import Draft202012Validator
+
+
+@allure.step("Validate JSON schema")  # Добавили allure шаг
+def validate_json_schema(instance: Any, schema: dict) -> None:
+    """
+    Проверяет, соответствует ли JSON-объект (instance) заданной JSON-схеме (schema).
+    :param instance: JSON-данные, которые нужно проверить.
+    :param schema: Ожидаемая JSON-schema.
+    :raises jsonschema.exceptions.ValidationError: Если instance не соответствует schema.
+    """
+
+    validate(
+        instance=instance,
+        schema=schema,
+        #Это для тестов не только типов, но и форматов (что емейл как емейл выглядит, например, или URL)
+        format_checker=Draft202012Validator.FORMAT_CHECKER
+    )
