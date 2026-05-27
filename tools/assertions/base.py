@@ -17,14 +17,14 @@ def assert_status_code(actual: int, expected: int):
     )
 
 @allure.step("Equality check {actual} and {expected}")
-def assert_equal(actual: Any, expected: Any):
+def assert_equal(actual: Any, expected: Any, name: str):
     """
     Проверяем равенство двух объектов
     :param actual:
     :param expected:
     :return:
     """
-    assert actual == expected, (f"Значения разные, {actual}, а ожидалось- {expected}")
+    assert actual == expected, (f"Значения {name} разные, пришло {actual}, а ожидалось- {expected}")
 
 @allure.step("Check {name} is true")
 def assert_is_true(actual: Any, name: str):
@@ -44,6 +44,15 @@ def assert_is_boolean(actual: Any, name: str):
     :return:
     """
     assert isinstance(actual, bool), (f'{name} не булево значение')
+
+@allure.step("Check {name} is int")
+def assert_is_int(actual: Any, name: str):
+    """Проверить, что объект является булевым значением
+    :param actual:
+    :param name:
+    :return:
+    """
+    assert isinstance(actual, int), (f'{name} не числовая переменная')
 
 
 @allure.step("Check length")

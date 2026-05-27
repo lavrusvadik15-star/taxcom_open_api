@@ -21,6 +21,15 @@ class Fake:
         """
         return self.faker.email(domain=domain)
 
+    def integer(self, start: int = 1, end: int= 100) -> int:
+        """
+        Генерирует случайное целое число в заданном диапазоне.
+        :param start: Начало диапазона (включительно).
+        :param end: Конец диапазона (включительно).
+        :return: Случайное целое число.
+        """
+        return self.faker.random_int(start, end)
+
     def password(self) -> str:
         """
         Генерирует случайный пароль.

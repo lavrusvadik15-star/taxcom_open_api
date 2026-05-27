@@ -12,6 +12,7 @@ def assert_login_response(response: LoginResponseSchema):
     :return:
     """
     assert_is_true(response.token, "Token")
+    assert_equal(response.result, "Success", "Результат")
 
 @allure.step("Chek body response Access Denied")
 def assert_login_response_access_denied(response: LoginResponseSchema):
@@ -20,4 +21,4 @@ def assert_login_response_access_denied(response: LoginResponseSchema):
     :param response:
     :return:
     """
-    assert_equal(actual=response.result, expected="AccessDenied")
+    assert_equal(actual=response.result, expected="AccessDenied", name="Результат")

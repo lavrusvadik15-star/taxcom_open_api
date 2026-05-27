@@ -2,7 +2,8 @@ import allure
 from httpx import Response
 
 from clients.abonent.abonent_client import AbonentClient
-from clients.advisers.advisers_schema import AdvisersSchema, SubscribeAdvisersRequestSchema
+from clients.advisers.advisers_schema import AdvisersSchema, SubscribeAdvisersRequestSchema, \
+    UnsubscribeAdvisersRequestSchema
 from clients.api_client import ApiClient
 from clients.private_http_builder_no_cert import AuthenticationUserSchema, get_private_http_client_no_cert
 
@@ -26,6 +27,19 @@ class AdvisersClient(ApiClient):
         :return:
         """
         return self.post("/api/Advisers/subscribeAdviser", json=request.model_dump(by_alias=True))
+
+    @allure.step("Отписаться от адвайзера")
+    def unsubcribe_adviser(self, request: UnsubscribeAdvisersRequestSchema) -> Response:
+        """Метод отписки от адвайзера
+        :param request:
+        :return:
+        """
+        return self.post("/api/Advisers/unSubscribeAdviser", json=request.model_dump(by_alias=True))
+
+    @allure.step("Получить список подписанных адвазеров")
+    def get_adviser_subscription(self) -> Response:
+        """Метод получить все подисанные айдивизеры"""
+        return self.get("/api/Advisers/getAdviserSubscription")
 
 
 

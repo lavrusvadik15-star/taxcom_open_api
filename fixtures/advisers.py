@@ -7,10 +7,11 @@ from clients.advisers.advisers_schema import AdvisersSchema, GetAdvisersResponse
 from fixtures.auth import CabinetSchema
 
 
-
+#Данные адвазеров полученных
 class Advisers(BaseModel):
     response: GetAdvisersResponseSchema
 
+    #возьмем айди первого из массива (отталкиваемся, что он не пустой, иначе зачем нам подписываться)
     @property
     def get_advisers_id(self) -> int:
         advisers_id = self.response.advisers[0].id
@@ -21,8 +22,9 @@ def advisers_client(auth_cabinet: CabinetSchema) -> AdvisersClient :
     """Создаем клиент для advissers от фикструы авторизации по кредам кабинета"""
     return get_advisers_client(auth_cabinet.credentials)
 
+#Создадим фикстуру получения списка всех адвайзеров, чтобы можно быть взять их параметры нужные
 @pytest.fixture
-def get_advisor(advisers_client: AdvisersClient) -> Advisers:
+def get_adviser(advisers_client: AdvisersClient) -> Advisers:
     #запрос
     response = advisers_client.get_advisers()
     #декодируем

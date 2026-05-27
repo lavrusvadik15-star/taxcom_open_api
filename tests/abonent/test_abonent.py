@@ -12,7 +12,7 @@ from fixtures.auth import CabinetSchema
 from tools.allure.tags import AllureTags
 from tools.assertions.abonent import assert_abonent_requisites, assert_available_departments, assert_get_mobile_qr, \
     assert_get_autopilot_status
-from tools.assertions.base import assert_status_code, assert_equal
+from tools.assertions.base import assert_status_code
 from tools.assertions.json import validate_json_schema
 
 
