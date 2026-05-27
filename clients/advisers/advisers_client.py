@@ -2,6 +2,7 @@ import allure
 from httpx import Response
 
 from clients.abonent.abonent_client import AbonentClient
+from clients.advisers.advisers_schema import AdvisersSchema, SubscribeAdvisersRequestSchema
 from clients.api_client import ApiClient
 from clients.private_http_builder_no_cert import AuthenticationUserSchema, get_private_http_client_no_cert
 
@@ -18,6 +19,13 @@ class AdvisersClient(ApiClient):
         """
         return self.get("api/Advisers/getAdvisers")
 
+    @allure.step("Подписаться на адвайзер")
+    def subscribe_adviser(self, request: SubscribeAdvisersRequestSchema) -> Response:
+        """Метод подписки
+        :param request:
+        :return:
+        """
+        return self.post("/api/Advisers/subscribeAdviser", json=request.model_dump(by_alias=True))
 
 
 

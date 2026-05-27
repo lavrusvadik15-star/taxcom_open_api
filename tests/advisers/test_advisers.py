@@ -3,7 +3,8 @@ import pytest
 import json
 
 from clients.advisers.advisers_client import AdvisersClient
-from clients.advisers.advisers_schema import GetAdvisersResponseSchema
+from clients.advisers.advisers_schema import GetAdvisersResponseSchema, SubscribeAdvisersRequestSchema
+from fixtures.advisers import Advisers
 from tools.allure.tags import AllureTags
 
 
@@ -25,3 +26,12 @@ class TestAdvisor:
 
         #преобразуем в объект по схеме
         response_data = GetAdvisersResponseSchema.model_validate_json(json_wrapped)
+
+
+    @allure.title("Subscribe adviser")
+    def test_subscribe_adviser(self, advisers_client: AdvisersClient, get_advisor: Advisers):
+        request = SubscribeAdvisersRequestSchema(adviser_id=get_advisor.get_advisers_id)
+        print(request)
+        #запрос
+        response = advisers_client.subscribe_adviser(request)
+        print(response)
