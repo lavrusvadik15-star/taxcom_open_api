@@ -69,7 +69,7 @@ def get_auth_client() -> AuthClient:
     """
     return AuthClient(client=get_public_http_client())
 
-# Клиент для работы с закрытым апи авторизации
+# Клиент для работы с закрытым апи авторизации по кредам
 def get_private_auth_client(user : AuthenticationUserSchema) -> PrivateAuthClient:
     """Создает уже авторизованный клиент для запросов апи auth после авторизации"""
     return PrivateAuthClient(client=get_private_http_client_no_cert(user))
