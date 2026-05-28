@@ -1,6 +1,6 @@
 import allure
 
-from clients.advisers.advisers_schema import GetAdviserSubscriptionResponseSchema
+from clients.advisers.advisers_schema import GetAdviserSubscriptionResponseSchema, GetAdvisersResponseSchema
 from tools.assertions.base import assert_is_true, assert_equal, assert_is_int, assert_is_not_empty
 
 
@@ -27,3 +27,20 @@ def assert_advisers_subscription(response: GetAdviserSubscriptionResponseSchema)
     for i, adviser in enumerate(advisers):
         assert_is_int(adviser.adviser_id, f"ID Адвайзера {i}")
         assert_is_not_empty(adviser.email, f"Email адвайзера {i}")
+
+@allure.step("Check body response")
+def assert_get_advisers(response: GetAdvisersResponseSchema):
+    """Проверим данные массива доступных адвайзеров"""
+
+    advisers = response.advisers
+    assert isinstance(advisers,list), "Поле 'advisers' должно быть списком"
+
+    # Выполнится если будет пусто в массиве адвайзеров
+    if not advisers:
+        print("Массив подписантов пуст")
+        return  # Выходим, если массив пуст
+
+    # Проверяем каждый элемент массива
+    for i, adviser in enumerate(advisers):
+        assert_is_int(adviser.id, f"ID Адвайзера {i}")
+        assert_is_true(adviser.title, f"Заголовок адвайзера {i}")

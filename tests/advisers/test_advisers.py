@@ -9,8 +9,9 @@ from clients.advisers.advisers_schema import GetAdvisersResponseSchema, Subscrib
     UnsubscribeAdvisersRequestSchema, GetAdviserSubscriptionResponseSchema
 from fixtures.advisers import Advisers
 from tools.allure.tags import AllureTags
-from tools.assertions.advisers import assert_advisers_subscription
+from tools.assertions.advisers import assert_advisers_subscription, assert_get_advisers
 from tools.assertions.base import assert_status_code
+from tools.assertions.json import validate_json_schema
 
 
 @pytest.mark.regression
@@ -34,7 +35,12 @@ class TestAdvisor:
 
         #Статус код
         assert_status_code(response.status_code, HTTPStatus.OK)
-        #хз что тут еще проверить, т.к. список может быть пустой. Разве что пришел тип "list"
+        #Проверка каждого элемента или пустоты массива
+        assert_get_advisers(response_data)
+
+        # Дополнительно проверяем, что тело ответа сервера соответствует ожидаемой JSON-схеме
+        validate_json_schema(wrapped_data,response_data.model_json_schema())
+
 
     @allure.title("Subscribe adviser")
     def test_subscribe_adviser(self, advisers_client: AdvisersClient, get_adviser: Advisers):
@@ -67,5 +73,8 @@ class TestAdvisor:
         assert_status_code(response.status_code, HTTPStatus.OK)
         # Проверим что там массив, и если не пустой - то его данные
         assert_advisers_subscription(response_data)
+
+        # Дополнительно проверяем, что тело ответа сервера соответствует ожидаемой JSON-схеме
+        validate_json_schema(wrapped_data,response_data.model_json_schema())
 
 
