@@ -55,6 +55,14 @@ def assert_is_int(actual: Any, name: str):
     assert isinstance(actual, int), (f'{name} не числовая переменная')
 
 
+@allure.step("Check {name} is not empty")
+def assert_is_not_empty(actual: str, name: str):
+    """Проверить, что строка не пустая
+    :param actual:
+    :param name:
+    :return:"""
+    assert actual, f"{name} — пусто!"
+
 @allure.step("Check length")
 def assert_length(actual: Sized, expected: Sized, name: str):
     """

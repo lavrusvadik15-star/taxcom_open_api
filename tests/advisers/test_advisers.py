@@ -59,10 +59,13 @@ class TestAdvisor:
 
         # тут возвращает массив, а не объект, потому преобразуем JSON‑массив в объект нашей схемы
         raw_data = json.loads(response.text)  # парсим JSON в Python‑структуру
-        wrapped_data = {"advisers": raw_data}  # оборачиваем массив в объект
+        wrapped_data = {"adviser": raw_data}  # оборачиваем массив в объект
         json_wrapped = json.dumps(wrapped_data)  # снова преобразуем в JSON‑строку
 
-        response_data = GetAdviserSubscriptionResponseSchema.model_json_schema(json_wrapped)
-        assert_advisers_subscription(json_wrapped)
+        response_data = GetAdviserSubscriptionResponseSchema.model_validate_json(json_wrapped)
+        # Статутс кода
+        assert_status_code(response.status_code, HTTPStatus.OK)
+        # Проверим что там массив, и если не пустой - то его данные
+        assert_advisers_subscription(response_data)
 
 
