@@ -7,5 +7,6 @@
 pytest_plugins = (
     "fixtures.auth",
     "fixtures.abonent",
-    "fixtures.advisers"
+    "fixtures.advisers",
+    "fixtures.banners"
 )

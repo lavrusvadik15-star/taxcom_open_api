@@ -8,3 +8,4 @@ class AllureTags(str, Enum):
     LOGIN = "LOGIN"
     ABONENT = "ABONENT"
     ADVISERS = "ADVISERS"
+    BANNERS = "BANNERS"
