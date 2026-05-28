@@ -18,5 +18,7 @@ class TestBanners:
         #запрос
         response = banners_client.get_banners()
 
+        #Не забыть ассерты добавить перебора
+
         #статус код
         assert_status_code(response.status_code, HTTPStatus.OK)
