@@ -40,7 +40,7 @@ def assert_get_tree_departments(response: GetDepartmentTreeResponseSchema):
     assert_is_true(departments.id, "id обязателен")
     assert_is_true(departments.name, "Название обазательно есть")
 
-    # Запуск рекурсивной проверки для всех детей корня
+    # Запуск рекурсивной проверки для всех детей
     if response.children:
         for child in response.children:
             check_node(child)

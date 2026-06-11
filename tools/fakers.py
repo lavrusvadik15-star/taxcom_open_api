@@ -51,6 +51,20 @@ class Fake:
         """
         return self.faker.uuid4()
 
+    def kpp(self) ->str:
+        """Генериует KPP
+        :return: KPP"""
+        tax_authority_code = self.faker.random_int(min=1000, max=9999)  # Код налогового органа
+        reason_code = self.faker.random_int(min=1, max=50)  # Причина постановки на учет (1-50)
+        record_number = self.faker.random_int(min=1, max=999)  # Порядковый номер
+
+        return f"{tax_authority_code:04d}{reason_code:02d}{record_number:03d}"
+
+    def address(self) -> str:
+        """Генерируется адрес
+        :return: Адрес"""
+        return self.faker.address()
+
 # Создаем экземпляр класса Fake с использованием Faker
 # Локализация Faker('ru_RU')
 fake = Fake(faker=Faker())

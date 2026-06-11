@@ -2,6 +2,7 @@ import allure
 from httpx import Response
 
 from clients.api_client import ApiClient
+from clients.department.department_schema import CreateDepartmentRequestSchema
 from clients.private_http_builder_no_cert import AuthenticationUserSchema, get_private_http_client_no_cert
 
 
@@ -17,6 +18,11 @@ class DepartmentClient(ApiClient):
     def get_tree_departments(self) -> Response:
         """Получение дерева подразделений"""
         return self.get("/api/Department/tree")
+
+    @allure.step('Create new department')
+    def create_new_department(self, request: CreateDepartmentRequestSchema) -> Response:
+        """Создание нового департамента"""
+        return self.post("/api/Department/add", json= request.model_dump(by_alias=True))
 
 
 

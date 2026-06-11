@@ -5,7 +5,9 @@ import allure
 
 from clients.department import department_client
 from clients.department.department_client import DepartmentClient
-from clients.department.department_schema import GetListDepartmentsResponseSchema, GetDepartmentTreeResponseSchema
+from clients.department.department_schema import GetListDepartmentsResponseSchema, GetDepartmentTreeResponseSchema, \
+    CreateDepartmentRequestSchema
+from fixtures.department import Department
 from tools.allure.tags import AllureTags
 from tools.assertions.base import assert_status_code, assert_is_true
 from tools.assertions.department import assert_get_list_departments, assert_get_tree_departments
@@ -40,7 +42,14 @@ class TestDepartment:
         #тут сложная проверка всего дерева, сколько бы не было уровней children
         assert_get_tree_departments(response_data)
 
+        # Дополнительно проверяем, что тело ответа сервера соответствует ожидаемой JSON-схеме
         validate_json_schema(response.json(),response_data.model_json_schema())
+
+    @allure.title("Create new department")
+    def test_create_new_department(self, department_client: DepartmentClient, list_departments: Department):
+        #запрос
+        request = CreateDepartmentRequestSchema(parent_department_id=list_departments.get_department_id)
+        response = department_client.create_new_department(request)
 
 
 

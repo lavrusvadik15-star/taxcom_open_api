@@ -4,6 +4,8 @@ from typing import Optional, List
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from tools.fakers import fake
+
 
 class DepartmentListSchema(BaseModel):
     """Схема данных в списке отеделений"""
@@ -107,4 +109,16 @@ class GetDepartmentTreeResponseSchema(BaseModel):
     """Схема ответа на запрос дерева подразделений."""
     department: DepartmentNode
     children: Optional[list[DepartmentNodeWithChildren]] = Field(default=None)
+
+class CreateDepartmentRequestSchema(BaseModel):
+    """Запрос добавления нового департамента"""
+    model_config = ConfigDict(populate_by_name=True)
+
+    name: str = Field(default_factory=fake.word)
+    parent_department_id: str = Field(alias="parentDepartmentId")
+    kpp: str = Field(default_factory=fake.kpp)
+    address: str = Field(default = None)
+    show_to_contractors: bool = Field(alias="showToContractors", default=False)
+    replace_to_department_if_same_address: bool = Field(alias="replaceToDepartmentIfSameAddress", default=False)
+    replace_to_department_if_same_kpp: bool = Field(alias="replaceToDepartmentIfSameKpp", default=False)
 
