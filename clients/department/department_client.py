@@ -2,7 +2,8 @@ import allure
 from httpx import Response
 
 from clients.api_client import ApiClient
-from clients.department.department_schema import CreateDepartmentRequestSchema
+from clients.department.department_schema import CreateDepartmentRequestSchema, UpdateDepartmentRequestSchema, \
+    DeleteDepartmentRequestSchema
 from clients.private_http_builder_no_cert import AuthenticationUserSchema, get_private_http_client_no_cert
 
 
@@ -23,6 +24,15 @@ class DepartmentClient(ApiClient):
     def create_new_department(self, request: CreateDepartmentRequestSchema) -> Response:
         """Создание нового департамента"""
         return self.post("/api/Department/add", json= request.model_dump(by_alias=True))
+
+    @allure.step('Update department')
+    def update_department(self, request: UpdateDepartmentRequestSchema) -> Response:
+        """Обновление данных о депортаменте"""
+        return self.post("/api/Department/update", json= request.model_dump(by_alias=True))
+
+    def delete_department(self, request: DeleteDepartmentRequestSchema) -> Response:
+        """Удаление подраздления"""
+        return self.delete("/api/Department/delete", json= request.model_dump(by_alias=True))
 
 
 

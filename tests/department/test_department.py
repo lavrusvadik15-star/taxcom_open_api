@@ -1,17 +1,20 @@
 from http import HTTPStatus
-
+import json
 import pytest
 import allure
 
 from clients.department import department_client
 from clients.department.department_client import DepartmentClient
 from clients.department.department_schema import GetListDepartmentsResponseSchema, GetDepartmentTreeResponseSchema, \
-    CreateDepartmentRequestSchema
-from fixtures.department import Department
+    CreateDepartmentRequestSchema, CreateDepartmentResponseSchema, UpdateDepartmentRequestSchema, \
+    DeleteDepartmentRequestSchema
+from fixtures.department import Department, NewDepartment
 from tools.allure.tags import AllureTags
-from tools.assertions.base import assert_status_code, assert_is_true
-from tools.assertions.department import assert_get_list_departments, assert_get_tree_departments
+from tools.assertions.base import assert_status_code, assert_is_true, assert_is_guid
+from tools.assertions.department import assert_get_list_departments, assert_get_tree_departments, \
+    assert_get_new_departemnt
 from tools.assertions.json import validate_json_schema
+from tools.fakers import fake
 
 
 @pytest.mark.regression
@@ -50,6 +53,40 @@ class TestDepartment:
         #запрос
         request = CreateDepartmentRequestSchema(parent_department_id=list_departments.get_department_id)
         response = department_client.create_new_department(request)
+        assert_status_code(response.status_code, HTTPStatus.OK)
+
+        #Т.к. в ответе просто приходится id нового департамента, то обернем его
+        raw_data = json.loads(response.content)
+        wrapped_data = {"department_id": raw_data}  # оборачиваем массив в объект
+        json_wrapped = json.dumps(wrapped_data)  # снова преобразуем в JSON‑строку
+        response_data = CreateDepartmentResponseSchema.model_validate_json(json_wrapped)
+
+        #Проверим, что вернулся guid департамента
+        assert_get_new_departemnt(response_data)
+
+        # Дополнительно проверяем, что тело ответа сервера соответствует ожидаемой JSON-схеме
+        validate_json_schema(wrapped_data,response_data.model_json_schema())
+
+    @allure.title("Update department")
+    def test_update_department(self, list_departments: Department, department_client: DepartmentClient, create_department: NewDepartment):
+        request = UpdateDepartmentRequestSchema(department_id=create_department.get_new_department_id,
+                                                parent_department_id=list_departments.get_department_id,
+                                                name = fake.word())
+        response = department_client.update_department(request)
+        #Тут апдейт ничего не отвечает, без проверок
+        assert_status_code(response.status_code, HTTPStatus.OK)
+
+    #Тест на удаление готов, но сделать его можно только при авторизации под сертификатом
+    # @allure.step("Delete department")
+    # def test_delete_department(self, list_departments: Department, department_client: DepartmentClient, create_department: NewDepartment):
+    #     request = DeleteDepartmentRequestSchema(department_id=create_department.get_new_department_id,
+    #                                             move_employees_to_department_id= list_departments.get_department_id)
+    #     response = department_client.delete_department(request)
+    #     assert_status_code(response.status_code, HTTPStatus.OK)
+
+
+
+
 
 
 

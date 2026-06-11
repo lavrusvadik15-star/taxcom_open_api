@@ -122,3 +122,32 @@ class CreateDepartmentRequestSchema(BaseModel):
     replace_to_department_if_same_address: bool = Field(alias="replaceToDepartmentIfSameAddress", default=False)
     replace_to_department_if_same_kpp: bool = Field(alias="replaceToDepartmentIfSameKpp", default=False)
 
+class CreateDepartmentResponseSchema(BaseModel):
+    department_id : str
+
+class UpdateDepartmentRequestSchema(BaseModel):
+    """Схема Заппрос обновления данных о депортатменте"""
+    model_config = ConfigDict(populate_by_name=True)
+
+    department_id: str = Field(alias="departmentId")
+    name: str = Field(default_factory=fake.word)
+    parent_department_id: str = Field(alias="parentDepartmentId")
+    kpp: str = Field(default_factory=fake.kpp)
+    address: str = Field(default = None)
+    show_to_contractors: bool = Field(alias="showToContractors", default=False)
+    replace_to_department_if_same_address: bool = Field(alias="replaceToDepartmentIfSameAddress", default=False)
+    replace_to_department_if_same_kpp: bool = Field(alias="replaceToDepartmentIfSameKpp", default=False)
+
+class UpdateDepartmentResponseSchema(BaseModel):
+    """Схема ответа обновления подраздлеления"""
+    model_config = ConfigDict(populate_by_name=True)
+
+class DeleteDepartmentRequestSchema(BaseModel):
+    """Схема удаленияя подразделения"""
+    model_config = ConfigDict(populate_by_name=True)
+
+    department_id: str = Field(alias="departmentId")
+    move_employees_to_department_id: str = Field(alias="moveEmployeesToDepartmentId")
+    ignore_warning: bool = Field(alias="ignoreWarning", default= False)
+
+

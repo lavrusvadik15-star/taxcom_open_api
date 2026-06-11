@@ -1,8 +1,8 @@
 import allure
 
 from clients.department.department_schema import GetListDepartmentsResponseSchema, GetDepartmentTreeResponseSchema, \
-    DepartmentNodeWithChildren
-from tools.assertions.base import assert_is_true
+    DepartmentNodeWithChildren, CreateDepartmentResponseSchema
+from tools.assertions.base import assert_is_true, assert_is_guid
 
 
 @allure.step("Check body response")
@@ -44,5 +44,9 @@ def assert_get_tree_departments(response: GetDepartmentTreeResponseSchema):
     if response.children:
         for child in response.children:
             check_node(child)
+
+@allure.step("Check body response")
+def assert_get_new_departemnt(response:CreateDepartmentResponseSchema):
+    assert_is_guid(response.department_id, "ID департамента не guid")
 
 

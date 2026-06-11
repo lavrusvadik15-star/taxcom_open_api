@@ -1,3 +1,4 @@
+import uuid
 from typing import Any, Sized
 
 import allure
@@ -62,6 +63,14 @@ def assert_is_not_empty(actual: str, name: str):
     :param name:
     :return:"""
     assert actual, f"{name} — пусто!"
+
+@allure.step("Check {name} is guid")
+def assert_is_guid(actual: Any, name: str):
+    """Проверим на соответствие формату GUID
+    :param actual:
+    :param name:
+    :return:"""
+    uuid_obj = uuid.UUID(str(actual))
 
 @allure.step("Check length")
 def assert_length(actual: Sized, expected: Sized, name: str):
