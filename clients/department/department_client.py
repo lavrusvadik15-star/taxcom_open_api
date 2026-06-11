@@ -13,6 +13,11 @@ class DepartmentClient(ApiClient):
         """Метод получения списка доступных отделов"""
         return self.get("/api/Department/listAvailableDepartments")
 
+    @allure.step('Get tree departments')
+    def get_tree_departments(self) -> Response:
+        """Получение дерева подразделений"""
+        return self.get("/api/Department/tree")
+
 
 
 
