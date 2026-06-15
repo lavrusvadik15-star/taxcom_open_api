@@ -63,16 +63,18 @@ class TestDepartment:
 
         #Проверим, что вернулся guid департамента
         assert_get_new_departemnt(response_data)
-
+        print(response_data)
         # Дополнительно проверяем, что тело ответа сервера соответствует ожидаемой JSON-схеме
         validate_json_schema(wrapped_data,response_data.model_json_schema())
 
     @allure.title("Update department")
     def test_update_department(self, list_departments: Department, department_client: DepartmentClient, create_department: NewDepartment):
-        request = UpdateDepartmentRequestSchema(department_id=create_department.get_new_department_id,
+        request = UpdateDepartmentRequestSchema(#department_id=create_department.get_new_department_id,
+                                                department_id= list_departments.get_new_department_id,
                                                 parent_department_id=list_departments.get_department_id,
                                                 name = fake.word())
         response = department_client.update_department(request)
+        print(response)
         #Тут апдейт ничего не отвечает, без проверок
         assert_status_code(response.status_code, HTTPStatus.OK)
 

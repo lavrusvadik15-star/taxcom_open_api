@@ -15,6 +15,7 @@ class LoginRequestSchema(BaseModel):
     abonent_id: str = Field(alias="abonentId", default_factory=lambda: None)
     two_step_auth_code: str = Field(alias="twoStepAuthCode", default_factory=fake.word)
 
+
 # class AbonentSchema(BaseModel):
 #     """Модель абонента"""
 #     id: str

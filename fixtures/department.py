@@ -23,6 +23,12 @@ class Department(BaseModel):
         department_id = self.response.infos[0].id
         return (department_id)
 
+    #Возьмем айди созданного подразделения (т.к. при сощдании отвечает просто какой то гуид)
+    @property
+    def get_new_department_id(self) -> str:
+        new_department_id = self.response.infos[1].id
+        return (new_department_id)
+
 class NewDepartment(BaseModel):
     response: CreateDepartmentResponseSchema
     #Берем id созданного департамента

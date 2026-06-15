@@ -6,7 +6,6 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from tools.fakers import fake
 
-
 class DepartmentListSchema(BaseModel):
     """Схема данных в списке отеделений"""
     model_config = ConfigDict(populate_by_name=True)

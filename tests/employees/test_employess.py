@@ -17,6 +17,7 @@ from tools.assertions.json import validate_json_schema
 class TestEmployees:
     """Класс для тестирования сотрудников"""
 
+    @allure.title("Get list employees")
     def test_get_list_employees(self, employees_client: EmployeesClient):
         response= employees_client.get_list_employees()
         assert_status_code(response.status_code, HTTPStatus.OK)
@@ -27,3 +28,7 @@ class TestEmployees:
 
         # Дополнительно проверяем, что тело ответа сервера соответствует ожидаемой JSON-схеме
         validate_json_schema(response.json(),response_data.model_json_schema())
+
+    @allure.title("Create new employee")
+    def test_create_new_employee(self, employees_client: EmployeesClient):
+        pass

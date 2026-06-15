@@ -61,6 +61,28 @@ class TestAuth:
         # Проверка ответа
         assert_login_response_access_denied(login_response_data)
 
+    @allure.title("Login with correct employee")
+    def test_login_employee(self, public_auth_client: AuthClient):
+        login_request = LoginRequestSchema(
+            login="dfghxs@yandex.ru",
+            password="722b0a4c-b162-4d26-b1e8-1955a707a338"
+        )
+        # Авторизация через API по кредам
+        login_response = public_auth_client.login_api(login_request)
+        # Декодируем пришедшую байтовую строку байтовой строку в обычную строку
+        json_string_response = login_response.content.decode('utf-8')
+        # преобразование строки JSON в словарь, но тут не надо, кажется
+        #data = json.loads(json_string_response)
+        # Десериализация JSON-ответа в объект LoginResponseSchema
+        login_response_data = LoginResponseSchema.model_validate_json(json_string_response)
+        #статус код проверка
+        assert_status_code(login_response.status_code, HTTPStatus.OK)
+        #проверка тела ответа
+        assert_login_response(login_response_data)
+
+        # Дополнительно проверяем, что тело ответа сервера соответствует ожидаемой JSON-схеме
+        validate_json_schema(login_response.json(),login_response_data.model_json_schema())
+
 
     # # Не вышло никаким образом извлечь данные из серта, чтобы передавать их как параметр
     # @allure.title("Login with cetrificate")
