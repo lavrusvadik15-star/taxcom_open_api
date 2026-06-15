@@ -76,7 +76,7 @@ class TestDepartment:
         #Тут апдейт ничего не отвечает, без проверок
         assert_status_code(response.status_code, HTTPStatus.OK)
 
-    #Тест на удаление готов, но сделать его можно только при авторизации под сертификатом
+    #Тест на удаление готов, но сделать его можно только при авторизации под сертификатом, добавить
     # @allure.step("Delete department")
     # def test_delete_department(self, list_departments: Department, department_client: DepartmentClient, create_department: NewDepartment):
     #     request = DeleteDepartmentRequestSchema(department_id=create_department.get_new_department_id,

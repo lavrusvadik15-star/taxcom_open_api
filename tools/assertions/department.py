@@ -33,7 +33,7 @@ def check_node(node: DepartmentNodeWithChildren):
 
 @allure.step("Check body response")
 def assert_get_tree_departments(response: GetDepartmentTreeResponseSchema):
-    """Проверем дерево отделов"""
+    """Проверим дерево отделов"""
     departments = response.department
     childrens = response.children
 
