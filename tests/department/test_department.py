@@ -79,12 +79,16 @@ class TestDepartment:
         assert_status_code(response.status_code, HTTPStatus.OK)
 
     #Тест на удаление готов, но сделать его можно только при авторизации под сертификатом, добавить
-    # @allure.step("Delete department")
-    # def test_delete_department(self, list_departments: Department, department_client: DepartmentClient, create_department: NewDepartment):
-    #     request = DeleteDepartmentRequestSchema(department_id=create_department.get_new_department_id,
-    #                                             move_employees_to_department_id= list_departments.get_department_id)
-    #     response = department_client.delete_department(request)
-    #     assert_status_code(response.status_code, HTTPStatus.OK)
+    @allure.step("Delete department")
+    def test_delete_department(self, list_departments: Department,
+                               department_cert_client: DepartmentClient,
+                               create_department: NewDepartment):
+        request = DeleteDepartmentRequestSchema(department_id=create_department.get_new_department_id,
+                                                move_employees_to_department_id= list_departments.get_department_id)
+        response = department_cert_client.delete_department(request)
+        response_raw = response.content.decode('utf-8')
+        print(response_raw)
+        #assert_status_code(response.status_code, HTTPStatus.OK)
 
 
 

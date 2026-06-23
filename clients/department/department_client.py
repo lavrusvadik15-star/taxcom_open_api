@@ -1,4 +1,5 @@
 import allure
+import httpx
 from httpx import Response
 
 from clients.api_client import ApiClient
@@ -32,7 +33,7 @@ class DepartmentClient(ApiClient):
 
     def delete_department(self, request: DeleteDepartmentRequestSchema) -> Response:
         """Удаление подраздления"""
-        return self.delete("/api/Department/delete", json= request.model_dump(by_alias=True))
+        return self.post("/api/Department/delete", json= request.model_dump(by_alias=True))
 
 
 
@@ -44,3 +45,8 @@ class DepartmentClient(ApiClient):
 def get_department_client(user: AuthenticationUserSchema) -> DepartmentClient:
     """Создаем клиента по переданному пользователю в создании приватного клиента"""
     return DepartmentClient(client=get_private_http_client_no_cert(user))
+
+#Клиент для работы с закрытым апи авторизации по сертификату
+def get_department_cert_client(http_client: httpx.Client) -> DepartmentClient:
+    """Создаем клиент на основе авторизации по сертификату"""
+    return DepartmentClient(client=http_client)

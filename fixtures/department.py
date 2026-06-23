@@ -3,7 +3,8 @@ import json
 import pytest
 from pydantic import BaseModel
 
-from clients.department.department_client import DepartmentClient, get_department_client
+from clients.auth.auth_client import PrivateAuthClient
+from clients.department.department_client import DepartmentClient, get_department_client, get_department_cert_client
 from clients.department.department_schema import DepartmentListSchema, GetListDepartmentsResponseSchema, \
     CreateDepartmentRequestSchema, CreateDepartmentResponseSchema
 from fixtures.auth import CabinetSchema
@@ -13,6 +14,12 @@ from fixtures.auth import CabinetSchema
 def department_client(auth_cabinet: CabinetSchema) -> DepartmentClient:
     """Создаем фикстуру создания клиента от фикструы авторизации по кредам кабинета"""
     return get_department_client(auth_cabinet.credentials)
+
+@pytest.fixture
+def department_cert_client(private_auth_cert_client: PrivateAuthClient) -> DepartmentClient:
+    """Создаем фикстуру создания клиента от фикструы авторизации по кредам кабинета"""
+    #return DepartmentClient(client=private_auth_cert_client.client)
+    return get_department_cert_client(http_client=private_auth_cert_client.client)
 
 
 class Department(BaseModel):
@@ -31,7 +38,7 @@ class Department(BaseModel):
 
 class NewDepartment(BaseModel):
     response: CreateDepartmentResponseSchema
-    #Берем id созданного департамента
+    #Тут почему то не айди созданного депртамента, а просто рандом айдишник запроса
     @property
     def get_new_department_id(self) -> str:
         new_department_id=self.response.department_id

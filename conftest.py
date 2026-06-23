@@ -10,5 +10,6 @@ pytest_plugins = (
     "fixtures.advisers",
     "fixtures.banners",
     "fixtures.department",
-    "fixtures.employees"
+    "fixtures.employees",
+    "fixtures.crypto"
 )

@@ -85,7 +85,7 @@ class EmployeeAuthorityUpdateSchema(BaseModel):
     warrant_internal_start_date: Optional[str] = Field(default=None, alias="warrantInternalStartDate")
     warrant_internal_end_date: Optional[str] = Field(default=None, alias="warrantInternalEndDate")
     storage_system_name: Optional[str] = Field(default=None, alias="storageSystemName")
-    additional_data: Optional[str] = Field(default=None, alias="additionalData")
+    additional_data: Optional[str] = Field(default="", alias="additionalData")
 
 class UpdateEmployeeRequestSchema(BaseModel):
     """Схемы обновления данных о пользователе"""
@@ -95,8 +95,8 @@ class UpdateEmployeeRequestSchema(BaseModel):
     email: str = Field(default_factory=fake.email, alias="email")
     last_name: str = Field(default_factory=fake.word, alias="lastName")
     first_name: str = Field(default_factory=fake.word, alias="firstName")
-    patronymic: Optional[str] = Field(default=None, alias="patronymic")
-    position: Optional[str] = Field(default=None, alias="position")
+    patronymic: Optional[str] = Field(default="", alias="patronymic")
+    position: Optional[str] = Field(default="", alias="position")
     permissions: str = Field(default="None", alias="permissions")
 
     department_id: Optional[str] = Field(default=None, alias="departmentId")

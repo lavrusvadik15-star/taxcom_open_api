@@ -66,3 +66,17 @@ class LoginCertificateRequestSchema(BaseModel):
     abonent_id: Optional[str] = Field(alias="abonentId",default=None)
     is_cert_new_qes: Optional[bool] = Field(alias="isCertNewQES", default=True)
     email: Optional[str] = Field(default=None)
+
+
+class LoginCertificateResponseSchema(BaseModel):
+    """Структура ответа для авторизации с помощью сертификата"""
+    model_config = ConfigDict(populate_by_name=True)
+
+    login: Optional[str]
+    result: str
+    abonents: list[AbonentSchema]
+    token: str
+    error_message: Optional[str] = Field(alias="errorMessage")
+    employee_info: Optional[EmployeeInfoSchema] = Field(alias="employeeInfo")
+    default_mchd_warrant_id: Optional[str] = Field(alias="defaultMchdWarrantId")
+    is_required_mchd: bool = Field(alias="isRequiredMchd")

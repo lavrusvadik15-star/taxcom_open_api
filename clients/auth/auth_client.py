@@ -1,8 +1,10 @@
 import allure
+import httpx
 from httpx import Response
 from clients.api_client import ApiClient
 from clients.auth.auth_schema import LoginRequestSchema, LoginCertificateRequestSchema, LoginResponseSchema
 from clients.private_http_builder_no_cert import AuthenticationUserSchema, get_private_http_client_no_cert
+from clients.private_http_builder_with_cert import private_client_with_cert
 from clients.public_http_builder import get_public_http_client
 
 
@@ -73,3 +75,8 @@ def get_auth_client() -> AuthClient:
 def get_private_auth_client(user : AuthenticationUserSchema) -> PrivateAuthClient:
     """Создает уже авторизованный клиент для запросов апи auth после авторизации"""
     return PrivateAuthClient(client=get_private_http_client_no_cert(user))
+
+#Клиент для работы с закрытым апи авторизации по сертификату
+def get_private_auth_cert_client(http_client: httpx.Client) -> PrivateAuthClient:
+    """Создаем клиент на основе авторизации по сертификату"""
+    return PrivateAuthClient(client=http_client)
