@@ -6,7 +6,7 @@ import json
 
 from clients.banners.banners_client import BannersClient
 from clients.banners.banners_schema import GetBannersResponseSchema
-from tools.allure.tags import AllureTags
+from tools.allure_utils.tags import AllureTags
 from tools.assertions.banners import assert_get_banners
 from tools.assertions.base import assert_status_code
 from tools.assertions.json import validate_json_schema

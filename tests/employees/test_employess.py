@@ -11,7 +11,7 @@ from clients.employees.employees_schema import GetListEmployeesResponseSchema, C
     GetEmployeeResponseSchema, EmployeeAuthorityUpdateSchema
 from fixtures.department import Department
 from fixtures.employees import NewEmployee, EmpoyeeInfo
-from tools.allure.tags import AllureTags
+from tools.allure_utils.tags import AllureTags
 from tools.assertions.base import assert_status_code
 from tools.assertions.employees import assert_get_list_employees, assert_create_new_employee
 from tools.assertions.json import validate_json_schema

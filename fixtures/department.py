@@ -17,7 +17,7 @@ def department_client(auth_cabinet: CabinetSchema) -> DepartmentClient:
 
 @pytest.fixture
 def department_cert_client(private_auth_cert_client: PrivateAuthClient) -> DepartmentClient:
-    """Создаем фикстуру создания клиента от фикструы авторизации по кредам кабинета"""
+    """Создаем фикстуру создания клиента от фикструы авторизации по серту"""
     #return DepartmentClient(client=private_auth_cert_client.client)
     return get_department_cert_client(http_client=private_auth_cert_client.client)
 
@@ -38,11 +38,17 @@ class Department(BaseModel):
 
 class NewDepartment(BaseModel):
     response: CreateDepartmentResponseSchema
+    request: CreateDepartmentRequestSchema
     #Тут почему то не айди созданного депртамента, а просто рандом айдишник запроса
     @property
     def get_new_department_id(self) -> str:
         new_department_id=self.response.department_id
         return (new_department_id)
+    #будем по имени его из реквеста, вызывая опять tree и искать
+    @property
+    def get_name_new_department(self) -> str:
+        new_department_name = self.request.name
+        return (new_department_name)
 
 
 @pytest.fixture
@@ -62,4 +68,4 @@ def create_department(department_client: DepartmentClient, list_departments: Dep
     wrapped_data = {"department_id": raw_data}  # оборачиваем массив в объект
     json_wrapped = json.dumps(wrapped_data)  # снова преобразуем в JSON‑строку
     response_data = CreateDepartmentResponseSchema.model_validate_json(json_wrapped)
-    return NewDepartment(response= response_data)
+    return NewDepartment(response= response_data, request= request)

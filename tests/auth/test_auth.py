@@ -8,7 +8,7 @@ from clients.auth.auth_client import AuthClient, PrivateAuthClient
 from clients.auth.auth_schema import LoginRequestSchema, LoginResponseSchema, LoginCertificateRequestSchema, \
     LoginCertificateResponseSchema
 from fixtures.auth import public_auth_client
-from tools.allure.tags import AllureTags
+from tools.allure_utils.tags import AllureTags
 from tools.assertions.auth import assert_login_response, assert_login_response_access_denied
 from tools.assertions.base import assert_status_code
 from tools.assertions.json import validate_json_schema

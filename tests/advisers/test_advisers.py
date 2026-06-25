@@ -8,7 +8,7 @@ from clients.advisers.advisers_client import AdvisersClient
 from clients.advisers.advisers_schema import GetAdvisersResponseSchema, SubscribeAdvisersRequestSchema, \
     UnsubscribeAdvisersRequestSchema, GetAdviserSubscriptionResponseSchema
 from fixtures.advisers import Advisers
-from tools.allure.tags import AllureTags
+from tools.allure_utils.tags import AllureTags
 from tools.assertions.advisers import assert_advisers_subscription, assert_get_advisers
 from tools.assertions.base import assert_status_code
 from tools.assertions.json import validate_json_schema

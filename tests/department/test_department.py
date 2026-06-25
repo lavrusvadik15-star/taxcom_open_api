@@ -9,7 +9,7 @@ from clients.department.department_schema import GetListDepartmentsResponseSchem
     CreateDepartmentRequestSchema, CreateDepartmentResponseSchema, UpdateDepartmentRequestSchema, \
     DeleteDepartmentRequestSchema
 from fixtures.department import Department, NewDepartment
-from tools.allure.tags import AllureTags
+from tools.allure_utils.tags import AllureTags
 from tools.assertions.base import assert_status_code, assert_is_true, assert_is_guid
 from tools.assertions.department import assert_get_list_departments, assert_get_tree_departments, \
     assert_get_new_departemnt
@@ -31,7 +31,7 @@ class TestDepartment:
         response_data = GetListDepartmentsResponseSchema.model_validate_json(response.text)
         #что не пустой список (головное есть всегда)
         assert_is_true(response_data,"Список подразделений")
-
+        print(response_data)
         assert_get_list_departments(response_data)
         # Дополнительно проверяем, что тело ответа сервера соответствует ожидаемой JSON-схеме
         validate_json_schema(response.json(),response_data.model_json_schema())
@@ -80,15 +80,29 @@ class TestDepartment:
 
     #Тест на удаление готов, но сделать его можно только при авторизации под сертификатом, добавить
     @allure.step("Delete department")
-    def test_delete_department(self, list_departments: Department,
+    def test_delete_department(self,list_departments: Department,
                                department_cert_client: DepartmentClient,
                                create_department: NewDepartment):
-        request = DeleteDepartmentRequestSchema(department_id=create_department.get_new_department_id,
+
+        name = create_department.get_name_new_department
+        id = None
+
+        #смотрим все подразделения с нашим созданным из теста ранее
+        list = department_cert_client.get_list_departments()
+        list_data = GetListDepartmentsResponseSchema.model_validate_json(list.text)
+        #ищем айди нового подразделения что мы создали
+        for i in list_data.infos:
+            if i.name == name:
+                id = i.id
+                break
+
+        request = DeleteDepartmentRequestSchema(department_id=id,
                                                 move_employees_to_department_id= list_departments.get_department_id)
         response = department_cert_client.delete_department(request)
+        #тут пустая строка, но пусть будет на будущее
         response_raw = response.content.decode('utf-8')
-        print(response_raw)
-        #assert_status_code(response.status_code, HTTPStatus.OK)
+        #ответ пустой, можно без проверокю (или добавить опять вызов листа, что там нет подразделения с таким id)
+        assert_status_code(response.status_code, HTTPStatus.OK)
 
 
 
