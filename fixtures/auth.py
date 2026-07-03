@@ -134,7 +134,7 @@ def private_auth_cert_client(test_login_with_certificate: AuthCertificateSchema)
     # Создаём базовый httpx клиент через чистую функцию
     http_client = private_client_with_cert(raw_token)
 
-    # Оборачиваем в твой кастомный клиент (если он нужен)
+    # Оборачиваем в кастомный клиент
     return get_private_auth_cert_client(http_client)
 
 

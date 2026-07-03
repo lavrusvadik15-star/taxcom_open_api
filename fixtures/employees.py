@@ -2,7 +2,8 @@ import json
 
 from pydantic import BaseModel
 
-from clients.employees.employees_client import EmployeesClient, get_employees_client
+from clients.auth.auth_client import PrivateAuthClient
+from clients.employees.employees_client import EmployeesClient, get_employees_client, get_employees_cert_client
 from clients.employees.employees_schema import CreateEmployeeRequestSchema, CreateEmployeeResponseSchema, \
     GetEmployeeRequestSchema, GetEmployeeResponseSchema
 from fixtures.auth import CabinetSchema
@@ -15,6 +16,12 @@ from fixtures.department import Department
 def employees_client(auth_cabinet: CabinetSchema) -> EmployeesClient:
     """Фикстура создания клиента сотрудников от фикструры авторизации"""
     return get_employees_client(auth_cabinet.credentials)
+
+@pytest.fixture
+def employees_cert_client(private_auth_cert_client: PrivateAuthClient) -> EmployeesClient:
+    """Создаем фикстуру создания клиента от фикструы авторизации по серту"""
+    #return DepartmentClient(client=private_auth_cert_client.client)
+    return get_employees_cert_client(http_client=private_auth_cert_client.client)
 
 class NewEmployee(BaseModel):
     response: CreateEmployeeResponseSchema
@@ -43,6 +50,10 @@ class EmpoyeeInfo(BaseModel):
     def get_id_authority(self) -> str:
         id = self.response.employee.employee_authority.id
         return(id)
+    @property
+    def get_lastname_authority(self) -> str:
+        name = self.response.employee.last_name
+        return(name)
 
 @pytest.fixture
 def get_empoyee_info(employees_client: EmployeesClient, create_new_employee: NewEmployee) -> EmpoyeeInfo:

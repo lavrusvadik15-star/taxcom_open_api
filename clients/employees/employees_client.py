@@ -1,4 +1,5 @@
 import allure
+import httpx
 from httpx import Response
 
 from clients.api_client import ApiClient
@@ -37,3 +38,8 @@ class EmployeesClient(ApiClient):
 def get_employees_client(user: AuthenticationUserSchema) -> EmployeesClient:
     """Создаем клиента по переданному пользователю в создании приватного клиента"""
     return EmployeesClient(client=get_private_http_client_no_cert(user))
+
+#Клиент по серту
+def get_employees_cert_client(http_client: httpx.Client) -> EmployeesClient:
+    """Создаем клиент на основе авторизации по сертификату"""
+    return EmployeesClient(client=http_client)

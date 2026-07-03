@@ -1,4 +1,5 @@
 import json
+import time
 from http import HTTPStatus
 
 import pytest
@@ -12,7 +13,7 @@ from clients.employees.employees_schema import GetListEmployeesResponseSchema, C
 from fixtures.department import Department
 from fixtures.employees import NewEmployee, EmpoyeeInfo
 from tools.allure_utils.tags import AllureTags
-from tools.assertions.base import assert_status_code
+from tools.assertions.base import assert_status_code, assert_equal
 from tools.assertions.employees import assert_get_list_employees, assert_create_new_employee
 from tools.assertions.json import validate_json_schema
 
@@ -60,16 +61,27 @@ class TestEmployees:
         response = employees_client.get_employee(request)
         assert_status_code(response.status_code, HTTPStatus.OK)
         response_data = GetEmployeeResponseSchema.model_validate_json(response.text)
+        print(response_data)
 
-    # @allure.title("Update employee details")
-    # def test_update_employee(self,employees_client: EmployeesClient, list_departments: Department, create_new_employee: NewEmployee,
-    #                          get_empoyee_info: EmpoyeeInfo):
-    #     authority_request= EmployeeAuthorityUpdateSchema(id= get_empoyee_info.get_id_authority,
-    #                                                      employee_id= create_new_employee.get_id_new_employee)
-    #     request = UpdateEmployeeRequestSchema(employee_id=create_new_employee.get_id_new_employee,
-    #                                           department_id= list_departments.get_department_id,
-    #                                           employee_authority=authority_request,
-    #                                           access_allowed_departments=[list_departments.get_department_id]
-    #                                           )
-    #     response = employees_client.update_employee(request)
-    #     print(response.text)
+    @allure.title("Update employee details")
+    def test_update_employee(self,employees_cert_client: EmployeesClient, list_departments: Department, create_new_employee: NewEmployee,
+                             get_empoyee_info: EmpoyeeInfo):
+        authority_request= EmployeeAuthorityUpdateSchema(id= get_empoyee_info.get_id_authority,
+                                                         employee_id= create_new_employee.get_id_new_employee)
+        request = UpdateEmployeeRequestSchema(employee_id=create_new_employee.get_id_new_employee,
+                                              department_id= list_departments.get_department_id,
+                                              employee_authority=authority_request,
+                                              access_allowed_departments=[list_departments.get_department_id],
+                                              last_name= "ИЗМЕНЕНО"
+                                              )
+        time.sleep(2)
+        response = employees_cert_client.update_employee(request)
+        time.sleep(2)
+        #имя для сранвнения
+        last_name_request = request.last_name
+        #имя из запроса данных по этому сотруднику
+        request_employee = GetEmployeeRequestSchema(employee_id= create_new_employee.get_id_new_employee)
+        response_employee = employees_cert_client.get_employee(request_employee)
+        response_data = GetEmployeeResponseSchema.model_validate_json(response_employee.text)
+
+        assert_equal(last_name_request, response_data.employee.last_name, "last_name разные")
