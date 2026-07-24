@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from clients.auth.auth_client import PrivateAuthClient
 from clients.employees.employees_client import EmployeesClient, get_employees_client, get_employees_cert_client
 from clients.employees.employees_schema import CreateEmployeeRequestSchema, CreateEmployeeResponseSchema, \
-    GetEmployeeRequestSchema, GetEmployeeResponseSchema
+    GetEmployeeRequestSchema, GetEmployeeResponseSchema, DeleteEmployeeRequestSchema
 from fixtures.auth import CabinetSchema
 import pytest
 
@@ -40,7 +40,19 @@ def create_new_employee(employees_client: EmployeesClient, list_departments: Dep
     wrapped_data = {"id_new_employee": raw_data}  # оборачиваем массив в объект
     json_wrapped = json.dumps(wrapped_data)  # снова преобразуем в JSON‑строку
     response_data = CreateEmployeeResponseSchema.model_validate_json(json_wrapped)
-    return NewEmployee(response= response_data)
+    #return NewEmployee(response= response_data)
+    employee = NewEmployee(response=response_data)
+    #До yeld код выполняется перед тестом
+    # Отдаём объект в тест (наш NewEmployee)
+    yield employee
+
+    #Всё, что после yield, выполнится после теста
+    # --- TEARDOWN: удаляем ---
+    delete_request = DeleteEmployeeRequestSchema(
+        employee_id=employee.get_id_new_employee,
+        ignore_warning=True
+    )
+    employees_client.delete_employee(delete_request)
 
 
 class EmpoyeeInfo(BaseModel):
@@ -61,3 +73,10 @@ def get_empoyee_info(employees_client: EmployeesClient, create_new_employee: New
         response = employees_client.get_employee(request)
         response_data = GetEmployeeResponseSchema.model_validate_json(response.text)
         return EmpoyeeInfo(response= response_data)
+
+@pytest.fixture
+def delete_user(employees_cert_client: EmployeesClient, create_new_employee: NewEmployee):
+        request = DeleteEmployeeRequestSchema(employee_id= create_new_employee.get_id_new_employee,
+                                              ignore_warning= True)
+
+        response = employees_cert_client.delete_employee(request)

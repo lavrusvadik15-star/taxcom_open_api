@@ -140,7 +140,15 @@ class EmployeeResponseSchema(BaseModel):
 
 
 class GetEmployeeResponseSchema(BaseModel):
+    """Схема ответа запроса получения данных о пользователе"""
     model_config = ConfigDict(populate_by_name=True)
 
     employee: EmployeeResponseSchema = Field(alias="employee")
+
+class DeleteEmployeeRequestSchema(BaseModel):
+    """Схема запроса удаления пользователя"""
+    model_config = ConfigDict(populate_by_name=True)
+
+    employee_id: str = Field(alias="EmployeeId")
+    ignore_warning: bool = Field(default=True, alias="IgnoreWarning")
 

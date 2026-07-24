@@ -4,7 +4,7 @@ from httpx import Response
 
 from clients.api_client import ApiClient
 from clients.employees.employees_schema import CreateEmployeeRequestSchema, UpdateEmployeeRequestSchema, \
-    GetEmployeeRequestSchema
+    GetEmployeeRequestSchema, DeleteEmployeeRequestSchema
 from clients.private_http_builder_no_cert import AuthenticationUserSchema, get_private_http_client_no_cert
 
 
@@ -30,6 +30,11 @@ class EmployeesClient(ApiClient):
     def get_employee(self, query: GetEmployeeRequestSchema) -> Response:
         """Метод получает подробные сведения об одном сотруднике"""
         return self.get("api/Employees/getEmployee", params=query.model_dump(by_alias=True))
+
+    @allure.step("Удалить пользователя")
+    def delete_employee(self, query: DeleteEmployeeRequestSchema):
+        """Метод удаления сотрудника"""
+        return self.get("api/Employees/delete", params=query.model_dump(by_alias=True))
 
 
 

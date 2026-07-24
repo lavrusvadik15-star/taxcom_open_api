@@ -9,7 +9,8 @@ from httpx import request
 from clients.employees.employees_client import EmployeesClient
 from clients.employees.employees_schema import GetListEmployeesResponseSchema, CreateEmployeeRequestSchema, \
     EmployeeAuthoritySchema, CreateEmployeeResponseSchema, UpdateEmployeeRequestSchema, GetEmployeeRequestSchema, \
-    GetEmployeeResponseSchema, EmployeeAuthorityUpdateSchema
+    GetEmployeeResponseSchema, EmployeeAuthorityUpdateSchema, DeleteEmployeeRequestSchema
+from fakers import fake
 from fixtures.department import Department
 from fixtures.employees import NewEmployee, EmpoyeeInfo
 from tools.allure_utils.tags import AllureTags
@@ -37,9 +38,9 @@ class TestEmployees:
         validate_json_schema(response.json(),response_data.model_json_schema())
 
     @allure.title("Create new employee")
-    def test_create_new_employee(self, employees_client: EmployeesClient, list_departments: Department):
+    def test_create_new_employee(self, employees_cert_client: EmployeesClient, list_departments: Department):
         request = CreateEmployeeRequestSchema(department_id= list_departments.get_department_id)
-        response = employees_client.create_employee(request)
+        response = employees_cert_client.create_employee(request)
         assert_status_code(response.status_code, HTTPStatus.OK)
 
         # Т.к. в ответе просто приходится id нового департамента, то обернем его
@@ -53,15 +54,14 @@ class TestEmployees:
 
         # Дополнительно проверяем, что тело ответа сервера соответствует ожидаемой JSON-схеме
         validate_json_schema(wrapped_data,response_data.model_json_schema())
-        print(response_data)
+
 
     @allure.title("Get employee info")
-    def test_get_employee(self, employees_client: EmployeesClient, create_new_employee: NewEmployee):
+    def test_get_employee(self, employees_cert_client: EmployeesClient, create_new_employee: NewEmployee):
         request = GetEmployeeRequestSchema(employee_id= create_new_employee.get_id_new_employee)
-        response = employees_client.get_employee(request)
+        response = employees_cert_client.get_employee(request)
         assert_status_code(response.status_code, HTTPStatus.OK)
         response_data = GetEmployeeResponseSchema.model_validate_json(response.text)
-        print(response_data)
 
     @allure.title("Update employee details")
     def test_update_employee(self,employees_cert_client: EmployeesClient, list_departments: Department, create_new_employee: NewEmployee,
@@ -72,7 +72,7 @@ class TestEmployees:
                                               department_id= list_departments.get_department_id,
                                               employee_authority=authority_request,
                                               access_allowed_departments=[list_departments.get_department_id],
-                                              last_name= "ИЗМЕНЕНО"
+                                              last_name= fake.word()
                                               )
         time.sleep(2)
         response = employees_cert_client.update_employee(request)
@@ -85,3 +85,10 @@ class TestEmployees:
         response_data = GetEmployeeResponseSchema.model_validate_json(response_employee.text)
 
         assert_equal(last_name_request, response_data.employee.last_name, "last_name разные")
+
+    @allure.title("Delete employee")
+    def test_delete_employee(self, employees_cert_client: EmployeesClient, create_new_employee: NewEmployee):
+        request = DeleteEmployeeRequestSchema(employee_id= create_new_employee.get_id_new_employee,
+                                              ignore_warning= True)
+
+        response = employees_cert_client.delete_employee(request)
