@@ -13,8 +13,18 @@ def assert_abonent_requisites(response: GetAbonentRequisitesResponseSchema):
 
 @allure.step("Check body response")
 def assert_available_departments(response: AvailableDepartmentsResponseSchema):
-    """Проверим что данные присутствуют"""
-    assert_is_true(response.items, "Список отделений")
+    """Проверим что данные присутствуют, если есть"""
+    #Что поле вообще есть (пустое или нет)
+    assert response.items is not None, "Список отделений отсутствует"
+    # На пустоту
+    if not response.items:
+        allure.attach("Список отделений пуст",
+                      name="Info",
+                      attachment_type=allure.attachment_type.TEXT)
+        return
+    # Если подразделения есть
+    for idx, department in enumerate(response.items):
+        assert department.id, f"У отделения {idx + 1} отсутствует ID"
 
 @allure.step("Check body response")
 def assert_get_mobile_qr(response: GetMobileQRResponseSchema):

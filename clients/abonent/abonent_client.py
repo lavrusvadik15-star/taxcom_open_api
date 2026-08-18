@@ -1,3 +1,4 @@
+import httpx
 from httpx import Response
 
 from clients.abonent.abonent_schema import GetAbonentRequest
@@ -51,3 +52,7 @@ def get_abonent_client(user : AuthenticationUserSchema) -> AbonentClient:
     :return:
     """
     return AbonentClient(client=get_private_http_client_no_cert(user))
+
+def get_abonent_cert_client(http_client: httpx.Client) -> AbonentClient:
+    """Создаем клиент на основе авторизации по сертификату"""
+    return AbonentClient(client=http_client)

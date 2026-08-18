@@ -2,6 +2,7 @@ from http import HTTPStatus
 
 import allure
 import pytest
+import time
 
 from clients.abonent import abonent_client
 from clients.abonent.abonent_client import AbonentClient
@@ -54,10 +55,10 @@ class TestAbonent:
         validate_json_schema(response.json(),response_string_data.model_json_schema())
 
     @allure.title("Get available departments")
-    def test_available_departments(self, abonent_client: AbonentClient, auth_cabinet: CabinetSchema):
+    def test_available_departments(self, abonent_cert_client: AbonentClient, auth_cabinet: CabinetSchema):
         query = GetAbonentRequest(abonent_id=auth_cabinet.response.abonents[0].id)
         #запрос
-        response = abonent_client.available_departments(query)
+        response = abonent_cert_client.available_departments(query)
         # Декодируем пришедшую байтовую строку байтовой строку в обычную строку
         response_string = response.content.decode('utf-8')
         # #Десериализация JSON-ответа в объект
@@ -65,6 +66,7 @@ class TestAbonent:
         # статус код
         assert_status_code(response.status_code, HTTPStatus.OK)
         # Валидация что ответ содержит список
+        time.sleep(2)
         assert_available_departments(response_string_data)
 
     @allure.title("Get mobile QR")

@@ -1,12 +1,10 @@
 import json
 from http import HTTPStatus
-from urllib import response
 
 import allure
 import pytest
-from httpx import request
 
-from allure_utils.tags import AllureTags
+from tools.allure_utils.tags import AllureTags
 from assertions.base import assert_status_code
 from assertions.contacts import assert_get_list_contacts, assert_get_low_list_contacts
 from clients.contacts.contact_client import ContactClient
@@ -15,7 +13,7 @@ from clients.contacts.contact_schema import GetContactListRequestSchema, GetCont
 
 
 @pytest.mark.regression
-@pytest.mark.department
+@pytest.mark.contacts
 @allure.tag(AllureTags.CONTACTS, AllureTags.REGRESSION)
 class TestContacts:
     """Класс тестов с контактами"""

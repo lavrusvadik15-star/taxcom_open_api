@@ -12,5 +12,19 @@ pytest_plugins = (
     "fixtures.department",
     "fixtures.employees",
     "fixtures.crypto",
-    "fixtures.contacts"
+    "fixtures.contacts",
+    "fixtures.document"
 )
+
+
+
+import sys
+from pathlib import Path
+
+# Добавляем корневую папку проекта в PYTHONPATH
+root_dir = Path(__file__).parent
+sys.path.insert(0, str(root_dir))
+
+# Также добавляем папку tools, если нужно
+tools_dir = root_dir / 'tools'
+sys.path.insert(0, str(tools_dir))

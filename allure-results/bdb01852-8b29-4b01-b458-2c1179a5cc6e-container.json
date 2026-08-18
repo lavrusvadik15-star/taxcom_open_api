@@ -1,0 +1,1 @@
+{"uuid": "3fe0797b-68c1-4557-807d-f4eca902dca4", "children": ["f1432f2c-9b7c-4a2b-b53a-4ef3556ceeb2"], "befores": [{"name": "abonent_cert_client", "status": "passed", "start": 1787060411342, "stop": 1787060411342}], "afters": [{"name": "abonent_cert_client::<lambda>", "start": 1787060413363}], "start": 1787060411342, "stop": 1787060413363}

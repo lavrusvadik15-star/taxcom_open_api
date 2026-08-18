@@ -1,0 +1,1 @@
+{"uuid": "9f9cf4c8-4968-4b68-a019-d2c852e804e4", "children": ["18537a39-1b9e-422e-999b-c7145630a885"], "befores": [{"name": "private_auth_cert_client", "status": "passed", "start": 1787060415666, "stop": 1787060415822}], "afters": [{"name": "private_auth_cert_client::<lambda>", "start": 1787060415843}], "start": 1787060415666, "stop": 1787060415843}

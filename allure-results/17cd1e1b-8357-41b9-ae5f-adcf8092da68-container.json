@@ -1,0 +1,1 @@
+{"uuid": "50502213-4cce-4c77-8d27-ad6e2d070878", "children": ["db1f9dad-676a-4b3b-a6e5-f48bee0cd35f"], "befores": [{"name": "certificate_base64_str", "status": "passed", "start": 1787060423346, "stop": 1787060423346}], "afters": [{"name": "certificate_base64_str::<lambda>", "start": 1787060423643}], "start": 1787060423346, "stop": 1787060423643}

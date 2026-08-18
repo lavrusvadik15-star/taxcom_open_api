@@ -4,13 +4,13 @@ from http import HTTPStatus
 
 import pytest
 import allure
-from httpx import request
 
 from clients.employees.employees_client import EmployeesClient
 from clients.employees.employees_schema import GetListEmployeesResponseSchema, CreateEmployeeRequestSchema, \
     EmployeeAuthoritySchema, CreateEmployeeResponseSchema, UpdateEmployeeRequestSchema, GetEmployeeRequestSchema, \
     GetEmployeeResponseSchema, EmployeeAuthorityUpdateSchema, DeleteEmployeeRequestSchema
 from fakers import fake
+
 from fixtures.department import Department
 from fixtures.employees import NewEmployee, EmpoyeeInfo
 from tools.allure_utils.tags import AllureTags

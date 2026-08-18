@@ -1,0 +1,1 @@
+{"uuid": "0e4f2b5b-1965-4069-b72b-597c9de01659", "children": ["929fd003-ed46-4671-aa7c-53a962cf306d"], "befores": [{"name": "contacts_cert_client", "status": "passed", "start": 1787060417293, "stop": 1787060417293}], "afters": [{"name": "contacts_cert_client::<lambda>", "start": 1787060417303}], "start": 1787060417293, "stop": 1787060417303}

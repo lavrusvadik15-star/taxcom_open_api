@@ -13,7 +13,7 @@ from tools.assertions.json import validate_json_schema
 
 
 @pytest.mark.regression
-@pytest.mark.banners
+@pytest.mark.contacts
 @allure.tag(AllureTags.BANNERS, AllureTags.REGRESSION)
 class TestBanners:
     """Класс для тестирования баннеров"""
