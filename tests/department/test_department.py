@@ -1,3 +1,4 @@
+import time
 from http import HTTPStatus
 import json
 import pytest
@@ -85,7 +86,7 @@ class TestDepartment:
 
         name = create_department.get_name_new_department
         id = None
-
+        time.sleep(2)
         #смотрим все подразделения с нашим созданным из теста ранее
         list = department_cert_client.get_list_departments()
         list_data = GetListDepartmentsResponseSchema.model_validate_json(list.text)
@@ -94,7 +95,7 @@ class TestDepartment:
             if i.name == name:
                 id = i.id
                 break
-
+        time.sleep(2)
         request = DeleteDepartmentRequestSchema(department_id=id,
                                                 move_employees_to_department_id= list_departments.get_department_id)
         response = department_cert_client.delete_department(request)
