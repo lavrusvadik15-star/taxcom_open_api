@@ -10,7 +10,7 @@ def assert_get_list_departments(response: GetListDepartmentsResponseSchema):
     """Проверим что там перечень департаментов"""
     departments = response.infos
 
-    assert isinstance(departments, list), "Поле 'advisers' должно быть списком"
+    assert isinstance(departments, list), "Поле  должно быть списком"
     # Тут не может не быть головного подразделения, так что проверять на пустоту нет смысла
 
     for i, department in enumerate(departments):

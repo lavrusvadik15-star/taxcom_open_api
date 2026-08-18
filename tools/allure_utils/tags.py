@@ -11,3 +11,4 @@ class AllureTags(str, Enum):
     BANNERS = "BANNERS"
     DEPARTMENT = "DEPARTMENT"
     EMPLOYEES = "EMPLOYEES"
+    CONTACTS = "CONTACTS"
